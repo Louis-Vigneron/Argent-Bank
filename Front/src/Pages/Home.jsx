@@ -1,30 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Argent Bank - Home Page</title>
-    <link rel="stylesheet" href="./css/main.css" />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-  </head>
-  <body>
+import chat from '../Assets/icon-chat.png'
+import money from '../Assets/icon-money.png'
+import security from '../Assets/icon-security.png'
+import logo from '../Assets/argentBankLogo.png'
+import { Link } from 'react-router-dom';
+
+export default  function Home() {
+  return (
+    <>
+     
     <nav class="main-nav">
-      <a class="main-nav-logo" href="./index.html">
+      <Link class="main-nav-logo" to="/">
         <img
           class="main-nav-logo-image"
-          src="./img/argentBankLogo.png"
+          src={logo}
           alt="Argent Bank Logo"
         />
         <h1 class="sr-only">Argent Bank</h1>
-      </a>
+      </Link>
       <div>
-        <a class="main-nav-item" href="./sign-in.html">
+        <Link class="main-nav-item" to="/sign-in">
           <i class="fa fa-user-circle"></i>
           Sign In
-        </a>
+        </Link>
       </div>
     </nav>
     <main>
@@ -40,7 +37,7 @@
       <section class="features">
         <h2 class="sr-only">Features</h2>
         <div class="feature-item">
-          <img src="./img/icon-chat.png" alt="Chat Icon" class="feature-icon" />
+          <img src={chat} alt="Chat Icon" class="feature-icon" />
           <h3 class="feature-item-title">You are our #1 priority</h3>
           <p>
             Need to talk to a representative? You can get in touch through our
@@ -49,7 +46,7 @@
         </div>
         <div class="feature-item">
           <img
-            src="./img/icon-money.png"
+            src={money}
             alt="Chat Icon"
             class="feature-icon"
           />
@@ -60,7 +57,7 @@
         </div>
         <div class="feature-item">
           <img
-            src="./img/icon-security.png"
+            src={security}
             alt="Chat Icon"
             class="feature-icon"
           />
@@ -75,5 +72,7 @@
     <footer class="footer">
       <p class="footer-text">Copyright 2020 Argent Bank</p>
     </footer>
-  </body>
-</html>
+ 
+    </>
+  );
+}

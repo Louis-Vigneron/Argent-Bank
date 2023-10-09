@@ -11,6 +11,19 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  
+}
+
+body,
+html {
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
 }
 
 .main {
@@ -71,7 +84,7 @@ body {
 }
 
 .hero {
-  background-image: url('../img/bank-tree.jpeg');
+  background-image: url('../Assets/bank-tree.jpeg');
   background-position: 0 -50px;
   background-size: cover;
   background-repeat: no-repeat;
