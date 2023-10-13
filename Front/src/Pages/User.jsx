@@ -1,71 +1,183 @@
 import logo from '../Assets/argentBankLogo.png'
 import { Link } from 'react-router-dom';
+import { useSelector } from "react-redux";
+import axios from 'axios';
+import { getUserProfile } from '../Utils/Reducer';
+import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-export default function User() {
+function post(token, dispatch){
+    axios.post('http://localhost:3001/api/v1/user/profile', token, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then((response) => {
+            const users = {
+                email: response.data.body.email,
+                firstName: response.data.body.firstName,
+                lastName: response.data.body.lastName,
+            }
+            dispatch(getUserProfile(users));
+        })
+        .catch(error => {
+            console.log(error.response.data)
+        });
+}
+
+function put(token, updateUser){
+    axios.put('http://localhost:3001/api/v1/user/profile', updateUser,  {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    } )
+        .then((response) => {
+            console.log(response.data)
+        })
+        .catch(error => {
+            console.log(error.response.data)
+        });
+}
+
+
+
+
+
+function User() {
+    const dispatch = useDispatch();
+    const token = useSelector((state) => state.token);
+    post(token, dispatch)
+    
+
+
+    const openEdit = () => {
+        const form = document.getElementById('editProfile');
+        const title = document.getElementById('editClose');
+        form.style.display = 'block';
+        title.style.display = 'none';
+    }
+
+    const save = () => {
+        const firstName = document.getElementById('firstName');
+        const lastName = document.getElementById('lastName');
+        let updateUser = {
+            firstName:'',
+            lastName:''
+        }
+        if(firstName.value.length === 0){
+            updateUser.firstName = firstName.placeholder
+        } else {
+            updateUser.firstName = firstName.value
+        }
+        if(lastName.value.length === 0){
+            updateUser.lastName = lastName.placeholder
+        } else {
+            updateUser.lastName = lastName.value
+        }
+        put(token, updateUser)
+        post(token, dispatch)
+        cancel()
+    }
+
+    const cancel = () => {
+        const form = document.getElementById('editProfile');
+        const title = document.getElementById('editClose');
+        const inputs = document.querySelectorAll('.editInput')
+        title.style.display = 'block';
+        form.style.display = 'none';
+        inputs.forEach(el=>{
+            el.value=''
+        })
+    }
     return (
         <>
 
-            <nav class="main-nav">
-                <Link class="main-nav-logo" to='/'>
+            <nav className="main-nav">
+                <Link className="main-nav-logo" to='/'>
                     <img
-                        class="main-nav-logo-image"
+                        className="main-nav-logo-image"
                         src={logo}
                         alt="Argent Bank Logo"
                     />
-                    <h1 class="sr-only">Argent Bank</h1>
+                    <h1 className="sr-only">Argent Bank</h1>
                 </Link>
                 <div>
-                    <Link class="main-nav-item" to='/user'>
-                        <i class="fa fa-user-circle"></i>
-                        Tony
+                    <Link className="main-nav-item" to='/user'>
+                        <i className="fa fa-user-circle"></i>
+                        {useSelector((state) => state.users.firstName)}
                     </Link>
-                    <Link class="main-nav-item" to='/'>
-                        <i class="fa fa-sign-out"></i>
+                    <Link className="main-nav-item" to='/'>
+                        <i className="fa fa-sign-out"></i>
                         Sign Out
                     </Link>
                 </div>
             </nav>
-            <main class="main bg-dark">
-                <div class="header">
-                    <h1>Welcome back<br />Tony Jarvis!</h1>
-                    <button class="edit-button">Edit Name</button>
+            <main className="main bg-dark">
+                <div className="header">
+
+                    <div className='editClose' id='editClose'>
+                        <h1>Welcome back<br />{useSelector((state) => state.users.firstName)} {useSelector((state) => state.users.lastName)} !</h1>
+                        <button onClick={openEdit} className="edit-button">Edit Name</button>
+                    </div>
+
+
+
+                    <div className='editProfile' id='editProfile'>
+                        <h1>Welcome back</h1>
+
+                        <div className='inputs'>
+                            <input className='editInput' id='firstName' type="text" placeholder={useSelector((state) => state.users.firstName)} />
+                            <input className='editInput' id='lastName' type="text" placeholder={useSelector((state) => state.users.lastName)} />
+                        </div>
+                        <div className='buttons'>
+                            <button className='editButton' onClick={save}>Save</button>
+                            <button className='editButton' onClick={cancel}>Cancel</button>
+                        </div>
+
+                    </div>
                 </div>
-                <h2 class="sr-only">Accounts</h2>
-                <section class="account">
-                    <div class="account-content-wrapper">
-                        <h3 class="account-title">Argent Bank Checking (x8349)</h3>
-                        <p class="account-amount">$2,082.79</p>
-                        <p class="account-amount-description">Available Balance</p>
+
+                <h2 className="sr-only">Accounts</h2>
+                <section className="account">
+                    <div className="account-content-wrapper">
+                        <h3 className="account-title">Argent Bank Checking (x8349)</h3>
+                        <p className="account-amount">$2,082.79</p>
+                        <p className="account-amount-description">Available Balance</p>
                     </div>
-                    <div class="account-content-wrapper cta">
-                        <button class="transaction-button">View transactions</button>
-                    </div>
-                </section>
-                <section class="account">
-                    <div class="account-content-wrapper">
-                        <h3 class="account-title">Argent Bank Savings (x6712)</h3>
-                        <p class="account-amount">$10,928.42</p>
-                        <p class="account-amount-description">Available Balance</p>
-                    </div>
-                    <div class="account-content-wrapper cta">
-                        <button class="transaction-button">View transactions</button>
+                    <div className="account-content-wrapper cta">
+                        <button className="transaction-button">View transactions</button>
                     </div>
                 </section>
-                <section class="account">
-                    <div class="account-content-wrapper">
-                        <h3 class="account-title">Argent Bank Credit Card (x8349)</h3>
-                        <p class="account-amount">$184.30</p>
-                        <p class="account-amount-description">Current Balance</p>
+                <section className="account">
+                    <div className="account-content-wrapper">
+                        <h3 className="account-title">Argent Bank Savings (x6712)</h3>
+                        <p className="account-amount">$10,928.42</p>
+                        <p className="account-amount-description">Available Balance</p>
                     </div>
-                    <div class="account-content-wrapper cta">
-                        <button class="transaction-button">View transactions</button>
+                    <div className="account-content-wrapper cta">
+                        <button className="transaction-button">View transactions</button>
+                    </div>
+                </section>
+                <section className="account">
+                    <div className="account-content-wrapper">
+                        <h3 className="account-title">Argent Bank Credit Card (x8349)</h3>
+                        <p className="account-amount">$184.30</p>
+                        <p className="account-amount-description">Current Balance</p>
+                    </div>
+                    <div className="account-content-wrapper cta">
+                        <button className="transaction-button">View transactions</button>
                     </div>
                 </section>
             </main>
-            <footer class="footer">
-                <p class="footer-text">Copyright 2020 Argent Bank</p>
+            <footer className="footer">
+                <p className="footer-text">Copyright 2020 Argent Bank</p>
             </footer>
 
         </>
     )
 }
+const mapStateToProps = (state) => ({
+    user: state.user, // Assurez-vous d'avoir un état qui stocke les informations de l'utilisateur
+  });
+
+export default connect(mapStateToProps)(User)

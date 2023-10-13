@@ -1,55 +1,81 @@
 import { Link } from 'react-router-dom'
 import logo from '../Assets/argentBankLogo.png'
+import { useState } from 'react'
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { loginSuccess, loginFailed } from '../Utils/Reducer';
+import { useNavigate } from 'react-router-dom';
 
-export default function signIn() {
+function SignIn() {
+    const dispatch = useDispatch();
+    const navigate  = useNavigate();
+    const [userName, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+   
+    const user =
+    {
+        email: userName,
+        password: password
+    }
+    
+    const login = (e) => {
+        e.preventDefault()
+        axios.post('http://localhost:3001/api/v1/user/login', user)
+        .then((response) => {
+            let token = response.data.body.token
+            dispatch(loginSuccess(token));
+            navigate('/user');
+        })
+            .catch(error => {
+                console.log(error.response.data)
+                dispatch(loginFailed());
+            });
+
+    }
+
     return (
         <>
-            <nav class="main-nav">
-                <Link class="main-nav-logo" to='/'>
+            <nav className="main-nav">
+                <Link className="main-nav-logo" to='/'>
                     <img
-                        class="main-nav-logo-image"
+                        className="main-nav-logo-image"
                         src={logo}
                         alt="Argent Bank Logo"
                     />
-                    <h1 class="sr-only">Argent Bank</h1>
+                    <h1 className="sr-only">Argent Bank</h1>
                 </Link>
                 <div>
-                    <Link class="main-nav-item" to="/sign-in">
-                        <i class="fa fa-user-circle"></i>
+                    <Link className="main-nav-item" to="/sign-in">
+                        <i className="fa fa-user-circle"></i>
                         Sign In
                     </Link>
                 </div>
             </nav>
-            <main class="main bg-dark">
-                <section class="sign-in-content">
-                    <i class="fa fa-user-circle sign-in-icon"></i>
+            <main className="main bg-dark">
+                <section className="sign-in-content">
+                    <i className="fa fa-user-circle sign-in-icon"></i>
                     <h1>Sign In</h1>
                     <form>
-                        <div class="input-wrapper">
-                            <label for="username">Username</label
-                            ><input type="text" id="username" />
+                        <div className="input-wrapper">
+                            <label htmlFor="username">Username</label>
+                            <input type="text" id="username" value={userName} onChange={e => setUserName(e.target.value)} />
                         </div>
-                        <div class="input-wrapper">
-                            <label for="password">Password</label
-                            ><input type="password" id="password" />
+                        <div className="input-wrapper">
+                            <label htmlFor="password">Password</label><input type="password" id="password" value={password} onChange={e => setPassword(e.target.value)} />
                         </div>
-                        <div class="input-remember">
-                            <input type="checkbox" id="remember-me" /><label for="remember-me"
-                            >Remember me</label
-                            >
+                        <div className="input-remember">
+                            <input type="checkbox" id="remember-me" /><label htmlFor="remember-me">Remember me</label>
                         </div>
-                        {/* PLACEHOLDER DUE TO STATIC SITE */}
-                        <Link to="/user" class="sign-in-button">Sign In</Link>
-                        {/* SHOULD BE THE BUTTON BELOW
-                    <button class="sign-in-button">Sign In</button>  */}
-
+                        <button onClick={login} className="sign-in-button">Sign In</button>
                     </form>
                 </section>
             </main>
-            <footer class="footer">
-                <p class="footer-text">Copyright 2020 Argent Bank</p>
+            <footer className="footer">
+                <p className="footer-text">Copyright 2020 Argent Bank</p>
             </footer>
         </>
-
     )
 }
+
+export default connect()(SignIn)
