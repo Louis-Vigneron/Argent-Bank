@@ -30,6 +30,12 @@ export const getUserProfile = (user) => {
     };
 }
 
+export const logOut = () => {
+    return {
+        type: "USER__LOGOUT",
+    };
+}
+
 
 function reducer(state = initialState, action) {
     switch (action.type) {
@@ -44,12 +50,14 @@ function reducer(state = initialState, action) {
                 ...state,
                 isAuthenticated: false
             };
+       
         case "USER__GET__PROFILE":
             return {
                 ...state,
                 users: action.payload,
-                isAuthenticated: false
             };
+        case "USER__LOGOUT":
+            return initialState;
 
         default:
             return state;

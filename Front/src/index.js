@@ -17,13 +17,13 @@ import { store } from './Utils/Reducer'
 
 const router = createBrowserRouter([
   {
-    path: "/user",
-    element: <User />,
-  },
-  {
     path: "/",
     element: <Home />,
   },
+  {
+    path: "/user",
+    element: <User />,
+  },  
   {
     path: "/sign-in",
     element: <SignIn />,

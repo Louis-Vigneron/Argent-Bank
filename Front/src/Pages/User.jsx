@@ -2,7 +2,7 @@ import logo from '../Assets/argentBankLogo.png'
 import { Link } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import axios from 'axios';
-import { getUserProfile } from '../Utils/Reducer';
+import { getUserProfile, logOut } from '../Utils/Reducer';
 import { connect } from 'react-redux';
 import { useDispatch } from 'react-redux';
 
@@ -14,7 +14,6 @@ function post(token, dispatch){
     })
         .then((response) => {
             const users = {
-                email: response.data.body.email,
                 firstName: response.data.body.firstName,
                 lastName: response.data.body.lastName,
             }
@@ -30,25 +29,15 @@ function put(token, updateUser){
         headers: {
             'Authorization': `Bearer ${token}`
         }
-    } )
-        .then((response) => {
-            console.log(response.data)
-        })
+    } )        
         .catch(error => {
             console.log(error.response.data)
         });
 }
 
-
-
-
-
 function User() {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch();   
     const token = useSelector((state) => state.token);
-    post(token, dispatch)
-    
-
 
     const openEdit = () => {
         const form = document.getElementById('editProfile');
@@ -89,6 +78,7 @@ function User() {
             el.value=''
         })
     }
+    
     return (
         <>
 
@@ -106,7 +96,7 @@ function User() {
                         <i className="fa fa-user-circle"></i>
                         {useSelector((state) => state.users.firstName)}
                     </Link>
-                    <Link className="main-nav-item" to='/'>
+                    <Link className="main-nav-item"  onClick={() => dispatch(logOut())} to='/' >
                         <i className="fa fa-sign-out"></i>
                         Sign Out
                     </Link>
@@ -176,8 +166,8 @@ function User() {
         </>
     )
 }
-const mapStateToProps = (state) => ({
-    user: state.user, // Assurez-vous d'avoir un état qui stocke les informations de l'utilisateur
-  });
+ const mapStateToProps = (state) => ({
+    user: state.users, 
+  }); 
 
 export default connect(mapStateToProps)(User)
