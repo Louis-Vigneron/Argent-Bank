@@ -1,5 +1,4 @@
-import { createStore } from 'redux'
-
+import { legacy_createStore as createStore } from 'redux';
 
 //state
 const initialState = {
@@ -50,7 +49,7 @@ function reducer(state = initialState, action) {
                 ...state,
                 isAuthenticated: false
             };
-       
+
         case "USER__GET__PROFILE":
             return {
                 ...state,

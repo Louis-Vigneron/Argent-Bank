@@ -1,56 +1,21 @@
 import { Link } from 'react-router-dom'
 import logo from '../Assets/argentBankLogo.png'
 import { useState } from 'react'
-import axios from 'axios';
 import { connect } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { loginSuccess, loginFailed, getUserProfile } from '../Utils/Reducer';
 import { useNavigate } from 'react-router-dom';
-
-function post(token, dispatch){
-    axios.post('http://localhost:3001/api/v1/user/profile', token, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    })
-        .then((response) => {
-            const users = {
-                firstName: response.data.body.firstName,
-                lastName: response.data.body.lastName,
-            }
-            dispatch(getUserProfile(users));
-        })
-        .catch(error => {
-            console.log(error.response.data)
-        });
-}
+import { Login } from '../Utils/Service';
 
 function SignIn() {
     const dispatch = useDispatch();
-    const navigate  = useNavigate();
+    const navigate = useNavigate();
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
-   
+
     const user =
     {
         email: userName,
         password: password
-    }
-    
-    const login = (e) => {
-        e.preventDefault()
-        axios.post('http://localhost:3001/api/v1/user/login', user)
-        .then((response) => {
-            let token = response.data.body.token
-            dispatch(loginSuccess(token));
-            post(token, dispatch)
-            navigate('/user');
-        })
-            .catch(error => {
-                console.log(error.response.data)
-                dispatch(loginFailed());
-            });
-
     }
 
     return (
@@ -86,7 +51,7 @@ function SignIn() {
                         <div className="input-remember">
                             <input type="checkbox" id="remember-me" /><label htmlFor="remember-me">Remember me</label>
                         </div>
-                        <button onClick={login} className="sign-in-button">Sign In</button>
+                        <button onClick={(e) => { Login(e, user, dispatch, navigate) }} className="sign-in-button">Sign In</button>
                     </form>
                 </section>
             </main>

@@ -5,15 +5,15 @@ import logo from '../Assets/argentBankLogo.png'
 import { Link } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { connect } from 'react-redux';
-import { logOut, store } from '../Utils/Reducer';
+import { logOut } from '../Utils/Redux';
 import { useDispatch } from 'react-redux';
 
 function Home() {
 
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const isConnect = useSelector((state) => state.isAuthenticated);
   const firstName = useSelector((state) => state.users.firstName);
-  console.log(store.getState())
+
   return (
     <>
 
@@ -33,7 +33,7 @@ const dispatch = useDispatch();
           </Link> : <><Link className="main-nav-item" to='/user'>
             <i className="fa fa-user-circle"></i>
             {firstName}
-          </Link><Link className="main-nav-item"  onClick={() => dispatch(logOut())} to='/' >
+          </Link><Link className="main-nav-item" onClick={() => dispatch(logOut())} to='/' >
               <i className="fa fa-sign-out"></i>
               Sign Out
             </Link></>}

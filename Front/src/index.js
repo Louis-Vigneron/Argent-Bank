@@ -6,14 +6,24 @@ import Home from './Pages/Home.jsx';
 import SignIn from './Pages/SignIn.jsx';
 import User from './Pages/User.jsx';
 import reportWebVitals from './reportWebVitals';
-
 import {
   createBrowserRouter,
   RouterProvider,
+  Navigate
 } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { Provider } from 'react-redux';
+import { store } from './Utils/Redux';
 
-import { Provider } from 'react-redux'
-import { store } from './Utils/Reducer'
+const UserRoute = () => {
+  const token = useSelector((state) => state.token);
+  const isConnect = useSelector((state) => state.isAuthenticated);
+  if (token === '' || isConnect === false) {
+    return <Navigate to="/sign-in" replace />;
+  } else {
+    return <User />;
+  }
+};
 
 const router = createBrowserRouter([
   {
@@ -22,13 +32,16 @@ const router = createBrowserRouter([
   },
   {
     path: "/user",
-    element: <User />,
-  },  
+    element: <UserRoute />,
+  },
   {
     path: "/sign-in",
     element: <SignIn />,
   }
 ]);
+
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>

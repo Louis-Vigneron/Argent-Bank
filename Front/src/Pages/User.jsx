@@ -1,42 +1,13 @@
 import logo from '../Assets/argentBankLogo.png'
 import { Link } from 'react-router-dom';
 import { useSelector } from "react-redux";
-import axios from 'axios';
-import { getUserProfile, logOut } from '../Utils/Reducer';
+import { logOut } from '../Utils/Redux';
 import { connect } from 'react-redux';
 import { useDispatch } from 'react-redux';
-
-function post(token, dispatch){
-    axios.post('http://localhost:3001/api/v1/user/profile', token, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    })
-        .then((response) => {
-            const users = {
-                firstName: response.data.body.firstName,
-                lastName: response.data.body.lastName,
-            }
-            dispatch(getUserProfile(users));
-        })
-        .catch(error => {
-            console.log(error.response.data)
-        });
-}
-
-function put(token, updateUser){
-    axios.put('http://localhost:3001/api/v1/user/profile', updateUser,  {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    } )        
-        .catch(error => {
-            console.log(error.response.data)
-        });
-}
+import { recoveryProfileUser, upadteProfileUser } from '../Utils/Service';
 
 function User() {
-    const dispatch = useDispatch();   
+    const dispatch = useDispatch();
     const token = useSelector((state) => state.token);
 
     const openEdit = () => {
@@ -50,21 +21,21 @@ function User() {
         const firstName = document.getElementById('firstName');
         const lastName = document.getElementById('lastName');
         let updateUser = {
-            firstName:'',
-            lastName:''
+            firstName: '',
+            lastName: ''
         }
-        if(firstName.value.length === 0){
+        if (firstName.value.length === 0) {
             updateUser.firstName = firstName.placeholder
         } else {
             updateUser.firstName = firstName.value
         }
-        if(lastName.value.length === 0){
+        if (lastName.value.length === 0) {
             updateUser.lastName = lastName.placeholder
         } else {
             updateUser.lastName = lastName.value
         }
-        put(token, updateUser)
-        post(token, dispatch)
+        upadteProfileUser(token, updateUser)
+        recoveryProfileUser(token, dispatch)
         cancel()
     }
 
@@ -74,14 +45,13 @@ function User() {
         const inputs = document.querySelectorAll('.editInput')
         title.style.display = 'block';
         form.style.display = 'none';
-        inputs.forEach(el=>{
-            el.value=''
+        inputs.forEach(el => {
+            el.value = ''
         })
     }
-    
+
     return (
         <>
-
             <nav className="main-nav">
                 <Link className="main-nav-logo" to='/'>
                     <img
@@ -96,7 +66,7 @@ function User() {
                         <i className="fa fa-user-circle"></i>
                         {useSelector((state) => state.users.firstName)}
                     </Link>
-                    <Link className="main-nav-item"  onClick={() => dispatch(logOut())} to='/' >
+                    <Link className="main-nav-item" onClick={() => dispatch(logOut())} to='/' >
                         <i className="fa fa-sign-out"></i>
                         Sign Out
                     </Link>
@@ -109,8 +79,6 @@ function User() {
                         <h1>Welcome back<br />{useSelector((state) => state.users.firstName)} {useSelector((state) => state.users.lastName)} !</h1>
                         <button onClick={openEdit} className="edit-button">Edit Name</button>
                     </div>
-
-
 
                     <div className='editProfile' id='editProfile'>
                         <h1>Welcome back</h1>
@@ -166,8 +134,8 @@ function User() {
         </>
     )
 }
- const mapStateToProps = (state) => ({
-    user: state.users, 
-  }); 
+const mapStateToProps = (state) => ({
+    user: state.users,
+});
 
 export default connect(mapStateToProps)(User)
