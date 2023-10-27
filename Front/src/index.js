@@ -5,6 +5,7 @@ import './Styles/main.css';
 import Home from './Pages/Home.jsx';
 import SignIn from './Pages/SignIn.jsx';
 import User from './Pages/User.jsx';
+import ErrorPage from './Pages/ErrorPage.jsx';
 import reportWebVitals from './reportWebVitals';
 import {
   createBrowserRouter,
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/user",
@@ -39,8 +41,6 @@ const router = createBrowserRouter([
     element: <SignIn />,
   }
 ]);
-
-
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

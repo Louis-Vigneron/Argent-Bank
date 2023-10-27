@@ -9,6 +9,8 @@ import { recoveryProfileUser, upadteProfileUser } from '../Utils/Service';
 function User() {
     const dispatch = useDispatch();
     const token = useSelector((state) => state.token);
+    const firstName = useSelector((state) => state.users.firstName)
+    const lastName = useSelector((state) => state.users.lastName)
 
     const openEdit = () => {
         const form = document.getElementById('editProfile');
@@ -18,21 +20,21 @@ function User() {
     }
 
     const save = () => {
-        const firstName = document.getElementById('firstName');
-        const lastName = document.getElementById('lastName');
+        const firstNameInput = document.getElementById('firstName');
+        const lastNameInput = document.getElementById('lastName');
         let updateUser = {
             firstName: '',
             lastName: ''
         }
-        if (firstName.value.length === 0) {
-            updateUser.firstName = firstName.placeholder
+        if (firstNameInput.value.length === 0) {
+            updateUser.firstName = firstName
         } else {
-            updateUser.firstName = firstName.value
+            updateUser.firstName = firstNameInput.value
         }
-        if (lastName.value.length === 0) {
-            updateUser.lastName = lastName.placeholder
+        if (lastNameInput.value.length === 0) {
+            updateUser.lastName = lastName
         } else {
-            updateUser.lastName = lastName.value
+            updateUser.lastName = lastNameInput.value
         }
         upadteProfileUser(token, updateUser)
         recoveryProfileUser(token, dispatch)
@@ -64,7 +66,7 @@ function User() {
                 <div>
                     <Link className="main-nav-item" to='/user'>
                         <i className="fa fa-user-circle"></i>
-                        {useSelector((state) => state.users.firstName)}
+                        {firstName}
                     </Link>
                     <Link className="main-nav-item" onClick={() => dispatch(logOut())} to='/' >
                         <i className="fa fa-sign-out"></i>
@@ -76,7 +78,7 @@ function User() {
                 <div className="header">
 
                     <div className='editClose' id='editClose'>
-                        <h1>Welcome back<br />{useSelector((state) => state.users.firstName)} {useSelector((state) => state.users.lastName)} !</h1>
+                        <h1>Welcome back<br />{firstName} {lastName} !</h1>
                         <button onClick={openEdit} className="edit-button">Edit Name</button>
                     </div>
 
@@ -84,8 +86,8 @@ function User() {
                         <h1>Welcome back</h1>
 
                         <div className='inputs'>
-                            <input className='editInput' id='firstName' type="text" placeholder={useSelector((state) => state.users.firstName)} />
-                            <input className='editInput' id='lastName' type="text" placeholder={useSelector((state) => state.users.lastName)} />
+                            <input className='editInput' id='firstName' type="text" placeholder={firstName} />
+                            <input className='editInput' id='lastName' type="text" placeholder={lastName} />
                         </div>
                         <div className='buttons'>
                             <button className='editButton' onClick={save}>Save</button>

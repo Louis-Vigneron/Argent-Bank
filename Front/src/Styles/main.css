@@ -328,4 +328,43 @@ html {
   margin: 10px;
 }
 
+.error{
+  font-size: 50px;
+  height: 75%;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ flex-direction: column;
+}
 
+.homeBack{
+  font-size: 24px;
+  color: black;
+  text-decoration: none;
+  transition: 0.5s;
+  border: 1px solid black;
+  padding: 15px;
+  border-radius: 25px;
+}
+
+
+.homeBack:hover{
+  color:#00bc77;
+  background-color: #2c3e50;
+}
+
+.errorPage{
+  height: 100%;
+}
+
+.errorText{
+  font-size: 30px;
+  margin: 25px;
+  color:#00bc77
+}
+
+.errorMessage{
+  color: red;
+  margin: 25px;
+  font-size: 20px;
+}

@@ -4,7 +4,8 @@ import { legacy_createStore as createStore } from 'redux';
 const initialState = {
     users: '',
     isAuthenticated: false,
-    token: ''
+    token: '',
+    error: false
 
 }
 
@@ -42,12 +43,14 @@ function reducer(state = initialState, action) {
             return {
                 ...state,
                 isAuthenticated: true,
-                token: action.payload
+                token: action.payload,
+                error: false,
             };
         case "LOGIN__FAILED":
             return {
                 ...state,
-                isAuthenticated: false
+                isAuthenticated: false,
+                error: true
             };
 
         case "USER__GET__PROFILE":

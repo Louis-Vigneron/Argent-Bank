@@ -43,7 +43,7 @@ export function Login(e, user, dispatch, navigate) {
         })
         .catch(error => {
             console.log(error.response.data)
-            dispatch(loginFailed());
+            dispatch(loginFailed(error.response.data));
         });
 
 }

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import logo from '../Assets/argentBankLogo.png'
 import { useState } from 'react'
 import { connect } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Login } from '../Utils/Service';
 
@@ -10,8 +10,9 @@ function SignIn() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [userName, setUserName] = useState('');
-    const [password, setPassword] = useState('');
-
+    const [password, setPassword] = useState('');    
+    const error = useSelector((state) => state.error);
+    
     const user =
     {
         email: userName,
@@ -54,6 +55,7 @@ function SignIn() {
                         <button onClick={(e) => { Login(e, user, dispatch, navigate) }} className="sign-in-button">Sign In</button>
                     </form>
                 </section>
+                <div className='errorMessage'>{ error ?  "Adresse email ou mot de passe non valide" : '' }</div>
             </main>
             <footer className="footer">
                 <p className="footer-text">Copyright 2020 Argent Bank</p>
